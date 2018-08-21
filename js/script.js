@@ -116,8 +116,9 @@ function drawFrame() {
     score++
     dropdownElement.speed += score / 100
   }
-  ctx.font = '20px Arial'
-  ctx.fillText(score, canvas.width - 30, 30)
+  ctx.font = '30px Arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(score, canvas.width - 30, 30);
   mainElement.update();
   dropdownElement.update();
   requestAnimationFrame(drawFrame);
