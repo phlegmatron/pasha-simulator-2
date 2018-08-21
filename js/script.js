@@ -1,6 +1,6 @@
 var canvas = document.getElementById('canvas'),
     ctx = canvas.getContext('2d');
-    mainElement = new animation(0, 500, 150, 150, 20);
+    mainElement = new animation(0, canvas.height - 200, 150, 150, 20);
     dropdownElement = new component(150, 0, 50, 50, 5)
     keyState = {}
     score = 0;
