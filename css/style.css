@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  background: url('../img/background.png') no-repeat center bottom fixed;
+  background-size: cover;
+}
