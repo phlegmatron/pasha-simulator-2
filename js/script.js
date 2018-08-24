@@ -1,13 +1,35 @@
 var canvas = document.getElementById('canvas'),
-    ctx = canvas.getContext('2d');
-    canvas.width = document.documentElement.clientWidth;
-    canvas.height = document.documentElement.clientHeight;
-    mainElement = new animation(0, canvas.height - 200, 150, 150, 20);
-    dropdownElement = new component(150, 0, 50, 50, 5)
-    keyState = {}
-    score = 0;
+    ctx = canvas.getContext('2d'),
+    mainElement,
+    dropdownElement,
+    keyState = {},
+    score,
+    game = {
+      start: false,
+      over: false
+    }
+
+canvas.width = document.documentElement.clientWidth;
+canvas.height = document.documentElement.clientHeight;
+
+function startGame() {
+  mainElement = new animation(0, canvas.height - 200, 150, 150, 20);
+  dropdownElement = new component(150, 0, 50, 50, 5);
+  score = 0;
+  drawFrame();
+}
 
 window.onkeydown = (event) => {
+  if (event.keyCode === 13) {
+    if (!game.start) {
+      game.start = true;
+      menu.classList.toggle('display-none');
+      startGame();
+    } else if (game.over) {
+        gameover.classList.toggle('display-none');
+        startGame();
+    }
+  }
   keyState[event.keyCode] = true;
 }
 window.onkeyup = (event) => {
@@ -106,8 +128,8 @@ function drawFrame() {
   if (dropdownElement.y === -dropdownElement.height) dropdownElement.x = getRandomNumber(0, canvas.width - dropdownElement.width);
   dropdownElement.y += dropdownElement.speed
   if ((dropdownElement.y + dropdownElement.height) > canvas.height) {
-    var gameOver = confirm(`Игра окончена, ваш счёт: ${score}. Еще раз?`)
-    if (gameOver) document.location.reload();
+    game.over = true;
+    gameover.classList.toggle('display-none');
     return;
   }
   if (mainElement.crashWith(dropdownElement)) {
@@ -115,9 +137,11 @@ function drawFrame() {
     score++
     dropdownElement.speed += score / 100
   }
-  ctx.font = '30px Arial';
+  ctx.font = '30px "Press Start 2p"';
   ctx.fillStyle = 'white';
-  ctx.fillText(score, canvas.width - 30, 30);
+  ctx.textAlign = 'center';
+  ctx.fillText("\u2764", canvas.width / 2, 50);
+  ctx.fillText(score, canvas.width / 2, 100);
   mainElement.update();
   dropdownElement.update();
   requestAnimationFrame(drawFrame);
@@ -126,6 +150,3 @@ function drawFrame() {
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
-
-var startGame = confirm('Начать игру?')
-if (startGame) drawFrame();
