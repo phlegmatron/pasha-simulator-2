@@ -4,6 +4,7 @@ var canvas = document.getElementById('canvas'),
     dropdownElement,
     keyState = {},
     score,
+    lives,
     game = {
       start: false,
       over: false
@@ -14,8 +15,10 @@ canvas.height = document.documentElement.clientHeight;
 
 function startGame() {
   mainElement = new animation(0, canvas.height - 200, 150, 150, 20);
-  dropdownElement = new component(150, 0, 50, 50, 5);
+  dropdownElement = new component(150, 0, 50, 50, 5, './img/beer.jpeg');
+  heart = new component(5, 7, 50, 50, 0, './img/heart.png');
   score = 0;
+  lives = 3;
   drawFrame();
 }
 
@@ -36,14 +39,14 @@ window.onkeyup = (event) => {
   keyState[event.keyCode] = false;
 }
 
-function component(x, y, width, height, speed) {
+function component(x, y, width, height, speed, imageSrc) {
   this.x = x;
   this.y = y;
   this.speed = speed;
   this.width = width;
   this.height = height;
   this.image = new Image;
-  this.image.src = './img/beer.jpeg';
+  this.image.src = imageSrc;
   this.update = () => {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
   }
@@ -128,9 +131,14 @@ function drawFrame() {
   if (dropdownElement.y === -dropdownElement.height) dropdownElement.x = getRandomNumber(0, canvas.width - dropdownElement.width);
   dropdownElement.y += dropdownElement.speed
   if ((dropdownElement.y + dropdownElement.height) > canvas.height) {
-    game.over = true;
-    gameover.classList.toggle('display-none');
-    return;
+    if (lives > 1) {
+      dropdownElement.y = -dropdownElement.height;
+      lives--
+    } else {
+      game.over = true;
+      gameover.classList.toggle('display-none');
+      return;
+    }
   }
   if (mainElement.crashWith(dropdownElement)) {
     dropdownElement.y = -dropdownElement.height;
@@ -140,8 +148,13 @@ function drawFrame() {
   ctx.font = '30px "Press Start 2p"';
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
-  ctx.fillText("\u2764", canvas.width / 2, 50);
+  ctx.fillText("SCORE", canvas.width / 2, 50);
   ctx.fillText(score, canvas.width / 2, 100);
+  for (let i = 1; i <= lives; i++) {
+    heart.update();
+    heart.x = heart.width * i + 5;
+  }
+  heart.x = 5;
   mainElement.update();
   dropdownElement.update();
   requestAnimationFrame(drawFrame);
