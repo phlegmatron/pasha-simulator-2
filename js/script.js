@@ -1,12 +1,11 @@
 var canvas = document.getElementById('canvas'),
     ctx = canvas.getContext('2d');
+    canvas.width = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
     mainElement = new animation(0, canvas.height - 200, 150, 150, 20);
     dropdownElement = new component(150, 0, 50, 50, 5)
     keyState = {}
     score = 0;
-
-canvas.width = document.documentElement.clientWidth;
-canvas.height = document.documentElement.clientHeight;
 
 window.onkeydown = (event) => {
   keyState[event.keyCode] = true;
