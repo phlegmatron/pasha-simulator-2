@@ -22,6 +22,10 @@ function startGame() {
   drawFrame();
 }
 
+window.ontouchstart = function () {
+  game.start = true
+}
+
 window.onkeydown = (event) => {
   if (event.keyCode === 13) {
     if (!game.start) {
